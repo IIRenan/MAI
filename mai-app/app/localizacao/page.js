@@ -41,7 +41,7 @@ export default function Localizacao() {
           <div className="w-12 h-1.5 bg-[#727970] rounded-full opacity-30 mb-2"></div>
           <div className="text-center w-full px-4">
                <h3 className="text-xl font-normal text-[#181d18]">Confirmar Localização</h3>
-               <p className="text-[#516350] text-sm mt-1">Toque no mapa para ajustar o pino</p>
+               <p className="text-[#516350] text-sm mt-1">Toque no mapa para selecionar</p>
           </div>
           <button 
             onClick={() => router.push('/levantamento')}

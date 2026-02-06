@@ -6,7 +6,6 @@ const JWT_SECRET = 'minha-chave-secreta-super-segura'; // Em produção, usar pr
 
 export class AuthService {
   
-  // Método definido no diagrama de classes [cite: 229]
   static async login(email, senha) {
     // 1. Busca no "Banco" (Camada de Persistência)
     const usuario = usuariosMock.find(u => u.email === email);

@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-// Mock de usuários
 const USUARIOS_MOCK = [
   { email: "admin@mai.com", senha: "1234", nome: "Avaliador Padrão" },
 ];

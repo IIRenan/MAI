@@ -1,18 +1,12 @@
-// lib/db.js
-// Simula a tabela de usuários do banco de dados
-export const usuariosMock = [
-  {
-    id: 1,
-    nome: "Avaliador Padrão",
-    email: "admin@mai.com",
-    senha: "1234", // Na vida real, isso estaria criptografado (hash)
-    tipo: "AVALIADOR"
+import { Pool } from 'pg';
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    // Isso aqui substitui a necessidade do arquivo 'global-bundle.pem'
+    // Ele diz: "Use criptografia SSL, mas confie na AWS sem pedir o crachá dela"
+    rejectUnauthorized: false, 
   },
-  {
-    id: 2,
-    nome: "Prefeitura de Aracaju",
-    email: "inst@mai.com",
-    senha: "abcd",
-    tipo: "INSTITUICAO"
-  }
-];
+});
+
+export default pool;
