@@ -1,70 +1,71 @@
 "use client";
-import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts'; // npm install recharts
+import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
 export default function Relatorio() {
-  // Dados mockados baseados no protótipo [cite: 299-301]
   const data = [
     { name: 'Meio Urbano', value: 30 },
     { name: 'Edificações', value: 45 },
     { name: 'Transporte', value: 25 },
   ];
-  const COLORS = ['#d9f99d', '#86efac', '#fde047']; // Cores extraídas do visual (verdes/amarelos)
+  
+  // Cores da paleta Material Green (Tonalidades)
+  const COLORS = ['#2e6c38', '#b3f2bb', '#516350']; 
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6 flex flex-col">
-      <header className="mb-6 flex items-center justify-between">
-         <button onClick={() => window.history.back()}>←</button>
-         <h1 className="text-2xl font-bold text-gray-800">Gerar relatório</h1>
-         <div className="w-6"></div>
+    <div className="min-h-screen bg-[#f7fbf2] p-6 flex flex-col font-sans">
+      <header className="mb-8 flex items-center gap-4">
+         <button onClick={() => window.history.back()} className="w-10 h-10 rounded-full bg-[#e1e5dd] flex items-center justify-center">←</button>
+         <h1 className="text-3xl font-normal text-[#181d18]">Resultado</h1>
       </header>
 
-      {/* Gráfico Circular [cite: 308] */}
-      <div className="bg-white p-6 rounded-3xl shadow-sm mb-6 flex flex-col items-center relative">
+      {/* Card do Gráfico - Surface Variant */}
+      <div className="bg-[#f0f4eb] p-8 rounded-[2.5rem] mb-8 flex flex-col items-center relative shadow-sm">
         <div className="h-64 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
                 data={data}
-                innerRadius={60}
-                outerRadius={80}
-                paddingAngle={5}
+                innerRadius={70}
+                outerRadius={90}
+                paddingAngle={4}
                 dataKey="value"
                 stroke="none"
               >
                 {data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} cornerRadius={10} />
                 ))}
               </Pie>
             </PieChart>
           </ResponsiveContainer>
         </div>
         
-        {/* Legenda do Gráfico */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <span className="text-3xl font-bold text-gray-300">MAI</span>
+        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+            <span className="text-5xl font-bold text-[#2e6c38]">7.8</span>
+            <span className="text-sm text-[#516350] font-medium">Índice MAI</span>
         </div>
       </div>
 
-      {/* Opções de Ação [cite: 302-307] */}
-      <div className="space-y-4">
-        <ActionItem icon="📊" title="Visualizar resultado detalhado" sub="Gráficos e métricas obtidas" />
-        <ActionItem icon="📄" title="Exportar planilha" sub="Arquivo .xls" />
-        <ActionItem icon="📑" title="Exportar arquivo PDF" sub="Documento formatado com resultados" />
-        <ActionItem icon="✏️" title="Realizar alterações" sub="Edição rápida" />
+      <h3 className="text-[#181d18] font-bold text-lg mb-4 ml-2">Ações</h3>
+
+      {/* Lista de Ações */}
+      <div className="space-y-3">
+        <ActionItem icon="📊" title="Detalhes Completos" color="#d4e8d0" />
+        <ActionItem icon="📄" title="Baixar Planilha (.xls)" color="#f0f4eb" />
+        <ActionItem icon="📑" title="Baixar PDF" color="#f0f4eb" />
       </div>
     </div>
   );
 }
 
-// Componente auxiliar para os botões de lista
-function ActionItem({ icon, title, sub }) {
+function ActionItem({ icon, title, color }) {
   return (
-    <button className="w-full flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm hover:bg-gray-50 text-left transition">
+    <button 
+        style={{ backgroundColor: color }}
+        className="w-full flex items-center gap-4 p-5 rounded-[1.5rem] text-left transition active:scale-[0.98]"
+    >
       <span className="text-2xl">{icon}</span>
-      <div>
-        <h3 className="font-bold text-gray-700">{title}</h3>
-        <p className="text-xs text-gray-400">{sub}</p>
-      </div>
+      <span className="font-medium text-[#181d18] text-lg">{title}</span>
+      <div className="flex-1 text-right text-[#516350]">→</div>
     </button>
   );
 }
