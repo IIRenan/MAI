@@ -36,22 +36,22 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
 
-## PostgreSQL
+# PostgreSQL
 
-# Open PostgreSQL as admin
+## Open PostgreSQL as admin
 ```bash
 sudo -u postgres psql
 ```
 
-# Configure the .env.local file
-# In the file:
-# DATABASE_URL=postgresql://user:password@localhost:5432/databasename
-# user -> database username
-# password -> database password
-# databasename -> database name used by the app
+## Configure the .env.local file
+ In the file:
+ DATABASE_URL=postgresql://user:password@localhost:5432/databasename
+ user -> database username
+ password -> database password
+ databasename -> database name used by the app
 
-# Create user and database (if needed)
-# In the PostgreSQL console:
+## Create user and database (if needed)
+ In the PostgreSQL console:
 ```bash
 CREATE USER user WITH PASSWORD 'password';
 # or
@@ -61,8 +61,8 @@ CREATE DATABASE databasename;
 GRANT ALL PRIVILEGES ON DATABASE databasename TO user;
 ```
 
-# Check the app port
-# The app uses port 8080. Make sure the port is open in the firewall or network.
+## Check the app port
+ The app uses port 8080. Make sure the port is open in the firewall or network.
 
-# ️Test the database connection
+## ️Test the database connection
 psql postgresql://user:password@localhost:5432/databasename
