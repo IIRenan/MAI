@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from 'recharts';
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable'; // <--- CORREÇÃO 1: Importação nomeada
+import autoTable from 'jspdf-autotable';
 
 export default function Relatorio() {
   const router = useRouter();
@@ -66,19 +66,52 @@ export default function Relatorio() {
     XLSX.writeFile(workbook, "Relatorio_MAI.xlsx");
   };
 
-  // 4. Funcionalidade: Baixar PDF (CORRIGIDA)
+  // 4. Funcionalidade: Baixar PDF 
   const baixarPDF = () => {
     const doc = new jsPDF();
     
+    //  PASSO 1: Capturar Data e Hora 
+    const agora = new Date();
+    const dataEmissao = new Intl.DateTimeFormat('pt-BR', {
+      day: '2-digit', month: '2-digit', year: 'numeric',
+      hour: '2-digit', minute: '2-digit'
+    }).format(agora);
+
+    //PASSO 2: Pegar o nome do usuário direto do LocalStorage 
+    let nomeResponsavel = "Usuário Convidado";
+    const usuarioSalvo = localStorage.getItem('mai_user');
+    
+    if (usuarioSalvo) {
+      try {
+        const u = JSON.parse(usuarioSalvo);
+        // Tenta pegar o nome, se não tiver, pega o email
+        nomeResponsavel = u.nome || u.email || "Usuário sem nome";
+      } catch (e) {
+        console.error("Erro ao ler usuário do localStorage", e);
+      }
+    }
+    
+    // --- GERAÇÃO DO CONTEÚDO DO PDF ---
+
     // Título
     doc.setFontSize(18);
-    doc.setTextColor(46, 108, 56);
+    doc.setTextColor(46, 108, 56); // Verde MAI
     doc.text("Relatório de Acessibilidade (MAI)", 14, 22);
     
+    // Subtítulo com Data e Responsável (Aqui é onde aparece a mágica)
+    doc.setFontSize(10);
+    doc.setTextColor(100); // Cinza
+    doc.text(`Data de Emissão: ${dataEmissao}`, 14, 30);
+    doc.text(`Responsável Técnico: ${nomeResponsavel}`, 14, 35);
+
+    // Linha divisória
+    doc.setDrawColor(200);
+    doc.line(14, 38, 196, 38);
+
     // Índice MAI
     doc.setFontSize(12);
-    doc.setTextColor(0, 0, 0);
-    doc.text(`Índice Geral Calculado: ${estatisticas.mai}`, 14, 32);
+    doc.setTextColor(0, 0, 0); // Preto
+    doc.text(`Índice Geral Calculado: ${estatisticas.mai}`, 14, 48);
 
     // Preparar dados da tabela
     const tableRows = [];
@@ -88,16 +121,18 @@ export default function Relatorio() {
       });
     });
 
-    // CORREÇÃO 2: Chamada direta da função autoTable passando o doc
+    // Gerar Tabela
     autoTable(doc, {
       head: [['Categoria', 'Critério Avaliado', 'Nota']],
       body: tableRows,
-      startY: 40,
+      startY: 55, // Ajustei a altura para não ficar em cima do cabeçalho
       theme: 'grid',
       headStyles: { fillColor: [46, 108, 56] }
     });
 
-    doc.save("Relatorio_MAI.pdf");
+    // Salvar o arquivo com a data no nome (opcional, mas fica organizado)
+    const nomeArquivo = `Relatorio_MAI_${agora.toISOString().slice(0,10)}.pdf`;
+    doc.save(nomeArquivo);
   };
 
   return (
