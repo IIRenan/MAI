@@ -11,12 +11,13 @@ export class AuthService {
     const usuario = usuariosMock.find(u => u.email === email);
 
     // 2. Validações (Regra de Negócio)
+    // Não é seguro incicar que existe usuário com o nome inserido
     if (!usuario) {
-      throw new Error('Usuário não encontrado');
+      throw new Error('Usuário ou senha incorretos');
     }
 
     if (usuario.senha !== senha) {
-      throw new Error('Senha incorreta');
+      throw new Error('Usuário ou senha incorretos');
     }
 
     // 3. Gerar Token (Sucesso)
@@ -25,14 +26,15 @@ export class AuthService {
       JWT_SECRET,
       { expiresIn: '1h' }
     );
-
+    
     // Retorna apenas dados não sensíveis + token
     return {
       token,
       usuario: {
         id: usuario.id,
         nome: usuario.nome,
-        email: usuario.email
+        email: usuario.email,
+        tipo: usuario.tipo
       }
     };
   }

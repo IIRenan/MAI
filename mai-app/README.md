@@ -14,6 +14,9 @@ pnpm dev
 bun dev
 ```
 
+You will need to install PostgreSQL, NodeJS, and jsonwebtoken
+TODO ADICIONAR COMANDOS DEPOIS (Também tem que lembrar de remover o usuário admin)
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
@@ -66,3 +69,10 @@ GRANT ALL PRIVILEGES ON DATABASE databasename TO user;
 
 ## ️Test the database connection
 psql postgresql://user:password@localhost:5432/databasename
+
+## Run
+To run the app with the public ip
+```bash
+npm run build
+npm run start -- -H 0.0.0.0 -p 8080
+```

@@ -9,4 +9,15 @@ const pool = new Pool({
   },
 });
 
+// Usuário hard coded (para testes) REMOVER!
+export const usuariosMock = [
+  {
+    id: 1,
+    email: "admin",
+    senha: "admin",
+    nome: "Administrador",
+    tipo: "ADMIN"
+  }
+];
+
 export default pool;

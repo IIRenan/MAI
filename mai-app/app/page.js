@@ -2,27 +2,36 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-const USUARIOS_MOCK = [
-  { email: "admin@mai.com", senha: "1234", nome: "Avaliador Padrão" },
-];
-
 export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState('');
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    setErro('');
-    const usuario = USUARIOS_MOCK.find(u => u.email === email && u.senha === senha);
-    if (usuario) {
-      localStorage.setItem('mai_user', JSON.stringify(usuario));
-      router.push('/localizacao'); 
-    } else {
-      setErro('Usuário ou senha incorretos');
-    }
-  };
+  const handleLogin = async (e) => {
+  e.preventDefault();
+  setErro("");
+
+  try {
+    const response = await fetch("/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, senha })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) throw new Error(data.error);
+
+    localStorage.setItem("mai_token", data.token);
+    localStorage.setItem("mai_user", JSON.stringify(data.usuario));
+
+    router.push("/localizacao");
+
+  } catch (err) {
+    setErro(err.message);
+  }
+};
 
   return (
     // Fundo Surface (#f7fbf2)
