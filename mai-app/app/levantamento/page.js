@@ -164,9 +164,53 @@ export default function Levantamento() {
       {/* Botão Flutuante de Gerar Relatório */}
       <div className="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#f7fbf2] via-[#f7fbf2] to-transparent pt-12">
         <button 
-          onClick={() => {
-            localStorage.setItem('mai_dados', JSON.stringify(detalhes));
-            router.push('/relatorio');
+          onClick={async () => {
+            try {
+              // Pega usuário logado do localStorage
+              const user = JSON.parse(localStorage.getItem("mai_user") || '{}');
+              const avaliador = user.nome || "Usuário desconhecido";
+
+              // Pega local selecionado do localStorage
+              const loc = JSON.parse(localStorage.getItem("mai_local") || '{}');
+              const local = loc.lat && loc.lng ? `Lat: ${loc.lat.toFixed(4)}, Lng: ${loc.lng.toFixed(4)}` : "Local não informado";
+
+              // Monta os critérios
+              const criteriosArray = Object.entries(detalhes).flatMap(([catId, metricas]) =>
+                Object.entries(metricas).map(([nome, valor]) => ({ nome, valor: Number(valor) }))
+              );
+
+              // Calcula a pontuação total
+              const pontuacao_total = criteriosArray.reduce((sum, c) => sum + c.valor, 0);
+
+              // Monta payload
+              const payload = {
+              local,
+                avaliador,
+                pontuacao_total,
+                observacoes: "",
+                criterios: criteriosArray
+              };
+
+              // Chama API
+              const response = await fetch("/api/historico", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+              });
+
+              const data = await response.json();
+
+              if (data.status === "salvo") {
+                alert("Relatório salvo com sucesso!");
+                router.push("/relatorio"); // Agora vai para página de relatório
+              } else {
+                alert("Erro ao salvar relatório: " + data.error);
+              }
+
+            } catch (err) {
+              console.error(err);
+              alert("Erro ao salvar relatório.");
+            }
           }}
           className="w-full bg-[#2e6c38] text-white font-bold h-16 rounded-[1.2rem] hover:bg-[#25572d] transition shadow-xl hover:shadow-2xl flex items-center justify-between px-6 active:scale-[0.98]"
         >

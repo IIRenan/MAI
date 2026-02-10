@@ -44,7 +44,11 @@ export default function Localizacao() {
                <p className="text-[#516350] text-sm mt-1">Toque no mapa para selecionar</p>
           </div>
           <button 
-            onClick={() => router.push('/levantamento')}
+            onClick={() => {
+            {/* Salva o usuario e a localizacao */}
+            localStorage.setItem("mai_local", JSON.stringify(coords));
+            router.push('/levantamento');
+            }}
             className="w-full max-w-sm bg-[#2e6c38] text-white font-medium text-lg h-14 rounded-full hover:bg-[#25572d] transition shadow-md flex items-center justify-center gap-2 mt-2 active:scale-[0.98]"
           >
             Iniciar Levantamento

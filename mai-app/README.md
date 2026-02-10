@@ -61,7 +61,32 @@ CREATE USER user WITH PASSWORD 'password';
 ALTER USER user WITH PASSWORD 'password';
 
 CREATE DATABASE databasename;
+```
+
+ If you want the user to be an admin
+```bash
 GRANT ALL PRIVILEGES ON DATABASE databasename TO user;
+```
+
+These are the tables used for the history screen
+```bash
+psql -U postgres -d mai
+
+CREATE TABLE levantamento_historico (
+  id SERIAL PRIMARY KEY,
+  local VARCHAR(150),
+  avaliador VARCHAR(100),
+  data TIMESTAMP DEFAULT NOW(),
+  pontuacao_total NUMERIC,
+  observacoes TEXT
+);
+
+CREATE TABLE criterios_historico (
+  id SERIAL PRIMARY KEY,
+  levantamento_historico NUMERIC REFERENCES levantamento_historico(id) ON DELETE CASCADE,
+  nome VARCHAR(150),
+  valor NUMERIC
+);
 ```
 
 ## Check the app port
